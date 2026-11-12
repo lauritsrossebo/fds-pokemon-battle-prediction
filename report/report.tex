@@ -16,7 +16,7 @@
 
 % ---- fill in before handing in ----
 \newcommand{\teammembers}{Laurits Rossebø, Angelo Betza, Relja Savic}
-\newcommand{\kagglenotebook}{[link to the public Kaggle notebook]}
+\newcommand{\kagglenotebook}{\url{https://www.kaggle.com/code/lauritsrosseb/pokemon-battleprediction-finalwformatting}}
 \newcommand{\githubrepo}{https://github.com/lauritsrossebo/fds-pokemon-battle-prediction}
 
 \title{Predicting Pokémon Battle Outcomes from the First 30 Turns\\[4pt]
@@ -92,7 +92,8 @@ averaging models that are each trained on their own set, and training models on 
 \textbf{Stage 4: making the results reproducible.} When we regenerated the first blend on another
 computer, about 3\% of the predictions changed although the code was the same. The cause was the
 library versions (scikit-learn 1.7.2 against 1.9.1). We therefore recorded the library versions of every
-submission, and the final notebook runs each submission with the versions it was made with.
+submission, and the final notebook runs each submission with the versions it was made with. With
+this, all three files are regenerated exactly.
 
 \textbf{Stage 5: evaluation.} Finally we looked at the models beyond accuracy: ROC curves,
 calibration, a learning curve, and how well cross-validation predicted the leaderboard
@@ -213,15 +214,15 @@ be scored on exactly the same folds as its members. The test set was only used t
 predictions, and features and models were chosen on the cross-validation scores, not on the public
 leaderboard.
 
-The standard deviation of the accuracy between folds is 0.6 to 1.0 points. We used this as the
+The standard deviation of the accuracy between folds is 0.6 to 1.1 points. We used this as the
 yardstick for every comparison: a change of less than about half a point was not treated as an
 improvement.
 
 \section{Evaluation}
 \label{sec:evaluation}
 
-The numbers in this section are computed on the out-of-fold predictions for the 10,000 training
-battles.
+The numbers and figures in this section are computed on the out-of-fold predictions for the
+10,000 training battles. They are taken from the run of the Kaggle notebook.
 
 \subsection{Metrics}
 
@@ -231,32 +232,32 @@ battles.
 \toprule
 Model & Accuracy & ROC AUC & Log loss & Brier & F1 \\
 \midrule
-Starter baseline (6 features) & 0.518 & 0.520 & 0.693 & 0.250 & 0.525 \\
-Random forest (A) & 0.669 & 0.734 & 0.604 & 0.209 & 0.672 \\
+Starter baseline (6 features) & 0.5178 & 0.5195 & 0.6927 & 0.2498 & 0.5252 \\
+Random forest (A) & 0.6706 & 0.7337 & 0.6042 & 0.2089 & 0.6735 \\
 \midrule
-Logistic regression (B) & 0.681 & 0.748 & 0.592 & 0.203 & 0.685 \\
-HistGradientBoosting (B) & 0.683 & 0.754 & 0.585 & 0.201 & 0.686 \\
-LightGBM (A) & 0.681 & 0.748 & 0.592 & 0.204 & 0.683 \\
-XGBoost (A) & 0.682 & 0.750 & 0.589 & 0.203 & 0.686 \\
+Logistic regression (B) & 0.6813 & 0.7481 & 0.5918 & 0.2035 & 0.6847 \\
+HistGradientBoosting (B) & 0.6876 & 0.7549 & 0.5839 & 0.2008 & 0.6903 \\
+LightGBM (A) & 0.6812 & 0.7485 & 0.5916 & 0.2038 & 0.6830 \\
+XGBoost (A) & 0.6806 & 0.7488 & 0.5892 & 0.2028 & 0.6846 \\
 \midrule
-Blend LR + HGB (submissions 1 and 2) & 0.687 & 0.758 & 0.582 & 0.200 & 0.690 \\
-Ensemble of the four models (submission 3) & 0.686 & 0.758 & 0.581 & 0.199 & 0.689 \\
+Blend LR + HGB (submissions 1 and 2) & 0.6892 & 0.7581 & 0.5813 & 0.1994 & 0.6915 \\
+Ensemble of the four models (submission 3) & 0.6883 & 0.7583 & 0.5808 & 0.1993 & 0.6912 \\
 \bottomrule
 \end{tabular}
-\caption{Out-of-fold metrics (5-fold CV, seed 42, scikit-learn 1.9.1). The letter in brackets is
-the feature set. The CV scores in Table~\ref{tab:final} are the ones measured when each submission
-was made, so they can differ from this table in the third decimal.}
+\caption{Out-of-fold metrics (5-fold CV, seed 42), as computed in the Kaggle notebook. The letter
+in brackets is the feature set. The CV scores in Table~\ref{tab:final} are the ones measured when
+each submission was made, so they can differ from this table in the third decimal.}
 \label{tab:metrics}
 \end{table}
 
-The single models are within 0.2 points of each other, whichever feature set they use, and the two
+The single models are within 0.7 points of each other, whichever feature set they use, and the two
 blends are a little better than every single model on all metrics (Table~\ref{tab:metrics}). The
 gain from blending is small because the models largely agree: the correlation between the
-predicted probabilities is 0.90 for the two models on set~B, and 0.92 between HistGradientBoosting
-on set~B and LightGBM on set~A. The second feature set therefore adds little that the first does
-not already contain. The
-confusion matrix of the ensemble is balanced: 3,478 true and 1,623 false predictions of a
-Player~1 win, 3,377 true and 1,522 false predictions of a loss. The model does not favour one
+predicted probabilities is about 0.90 for the two models on set~B, and about 0.92 between
+HistGradientBoosting on set~B and LightGBM on set~A. The second feature set therefore adds little
+that the first does not already contain. The
+confusion matrix of the ensemble is balanced: 3,489 true and 1,606 false predictions of a
+Player~1 win, 3,394 true and 1,511 false predictions of a loss. The model does not favour one
 player.
 
 \subsection{ROC curves and calibration}
@@ -278,7 +279,7 @@ range; the bars show how many battles fall in it.}
 Figure~\ref{fig:roc} (left) shows where the performance comes from. The starter baseline is almost
 on the diagonal (AUC 0.52). A single number from the log, the difference in remaining team HP at
 turn 30, already reaches an AUC of 0.71 and an accuracy of 63.1\%. All the other features and the
-models together add about 4 points of AUC and 5 points of accuracy on top of it.
+models together add about 4 points of AUC and almost 6 points of accuracy on top of it.
 
 The predicted probabilities are well calibrated (Figure~\ref{fig:roc}, right): among the battles
 where the ensemble gives Player~1 about 70\%, Player~1 won about 70\%. This matters for two
@@ -301,15 +302,15 @@ Right: learning curve of the LR + HGB blend (mean and standard deviation over fi
 \end{figure}
 
 Because the model is calibrated, its confidence tells us which battles are hard
-(Figure~\ref{fig:conf}, left). For the 21\% of battles where it is at least 80\% sure,
-it is right in 87\% of the cases. For the 30\% where it is below 60\%, it is
-right in only 54\%. These are battles that are still even after 30 turns, and their
+(Figure~\ref{fig:conf}, left). For the 21\% of battles where it is at least 80\% sure, it is
+right in 85\% to 95\% of the cases. For the 30\% where it is below 60\%, it is right in only 53\%
+to 58\%. These are battles that are still even after 30 turns, and their
 result is decided in the turns we do not see. We think this, and not the choice of model, is what
 limits the accuracy.
 
 The learning curve (Figure~\ref{fig:conf}, right) supports this. The validation accuracy rises
-from 64.5\% with 500 training battles to 68.7\% with 8,000, but the last doubling of the data adds
-less than one point. The gap to the training accuracy (79.2\%) shows that the boosted trees still
+from 64.8\% with 500 training battles to 68.9\% with 8,000, but the last doubling of the data adds
+only about one point. The gap to the training accuracy (79.2\%) shows that the boosted trees still
 overfit to some degree, even with small trees and regularisation. More battles would help a
 little; a ten-point jump would need information that is not in the first 30 turns.
 
@@ -395,6 +396,7 @@ The Kaggle notebook clones the repository linked on the first page and runs ever
 here: features, cross-validation, the evaluation figures and the three final submissions. Each
 submission is generated in a separate process with the library versions it was originally made
 with (\texttt{requirements/} in the repository), and the notebook compares the regenerated files
-with the uploaded ones.
+with the uploaded ones. In the run of the Kaggle notebook, all three regenerated files are
+identical to the files we uploaded: 100\% of the 5,000 predictions are equal for each of them.
 
 \end{document}
