@@ -1,0 +1,15 @@
+# pinned library folders made by pokefds/pinned.py
+.envs/
+# files written when the notebook is run locally
+output/
+# competition data
+data/
+fds-pokemon-battles-prediction-2026/
+__pycache__/
+.ipynb_checkpoints/
+# LaTeX build files
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.synctex.gz
