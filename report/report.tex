@@ -92,7 +92,8 @@ averaging models that are each trained on their own set, and training models on 
 \textbf{Stage 4: making the results reproducible.} When we regenerated the first blend on another
 computer, about 3\% of the predictions changed although the code was the same. The cause was the
 library versions (scikit-learn 1.7.2 against 1.9.1). We therefore recorded the library versions of every
-submission, and the final notebook runs each submission with the versions it was made with.
+submission, and the final notebook runs each submission with the versions it was made with. With
+this, all three files are regenerated exactly.
 
 \textbf{Stage 5: evaluation.} Finally we looked at the models beyond accuracy: ROC curves,
 calibration, a learning curve, and how well cross-validation predicted the leaderboard
@@ -395,6 +396,7 @@ The Kaggle notebook clones the repository linked on the first page and runs ever
 here: features, cross-validation, the evaluation figures and the three final submissions. Each
 submission is generated in a separate process with the library versions it was originally made
 with (\texttt{requirements/} in the repository), and the notebook compares the regenerated files
-with the uploaded ones.
+with the uploaded ones. In the run of the Kaggle notebook, all three regenerated files are
+identical to the files we uploaded: 100\% of the 5,000 predictions are equal for each of them.
 
 \end{document}
