@@ -30,8 +30,14 @@ def install_requirements(requirements, env_dir):
     reqs = [line.strip() for line in Path(requirements).read_text().splitlines()
             if line.strip() and not line.startswith("#") and not line.startswith("python==")]
     print(f"Installing {' '.join(reqs)}", flush=True)
-    return _run([sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check",
-                 "--target", str(env_dir), *reqs]) == 0
+    # pip compares the pinned versions with the packages of the notebook's own environment and
+    # reports conflicts that do not apply to a separate folder, so its output is shown only on failure
+    result = subprocess.run([sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check",
+                             "--no-warn-conflicts", "--target", str(env_dir), *reqs],
+                            capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if result.returncode != 0:
+        print(result.stdout + result.stderr, flush=True)
+    return result.returncode == 0
 
 
 def run_pinned(name, requirements, out_dir, env_dir, data_dir=None):
